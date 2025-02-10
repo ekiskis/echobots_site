@@ -3,105 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Мой сайт{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>{% block title %}Сайт{% endblock %}</title>
+    <style>
+        .active { font-weight: bold; }
+        #sidebar { width: 250px; background: #f4f4f4; padding: 10px; }
+        .menu-toggle { cursor: pointer; font-weight: bold; }
+        .submenu { display: none; padding-left: 15px; }
+    </style>
 </head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Главная</a>
+        <a href="{% url 'events' %}" class="{% if request.path == '/events/' %}active{% endif %}">События</a>
+        <a href="{% url 'about' %}" class="{% if request.path == '/about/' %}active{% endif %}">О сайте</a>
+    </nav>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const sidebar = document.getElementById("sidebar-menu");
-        const savedState = localStorage.getItem("menuState");
-    
-        if (savedState) {
-            sidebar.innerHTML = savedState;
-        }
-    
-        document.querySelectorAll(".menu-toggle").forEach(button => {
-            button.addEventListener("click", function () {
-                localStorage.setItem("menuState", sidebar.innerHTML);
+    <div id="sidebar">
+        {% for menu_list in menu_lists %}
+            <div>
+                <span class="menu-toggle">{{ menu_list.title }}</span>
+                <div class="submenu">
+                    {% for item in menu_list.items.all %}
+                        {% if item.linked_page %}
+                            <a href="{% url 'page_detail' slug=item.linked_page.slug %}">{{ item.title }}</a>
+                        {% elif item.external_url %}
+                            <a href="{{ item.external_url }}" target="_blank">{{ item.title }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedState = localStorage.getItem("menuState");
+            if (savedState) {
+                document.getElementById("sidebar").innerHTML = savedState;
+            }
+
+            document.querySelectorAll(".menu-toggle").forEach(button => {
+                button.addEventListener("click", function () {
+                    this.nextElementSibling.classList.toggle("submenu");
+                    localStorage.setItem("menuState", document.getElementById("sidebar").innerHTML);
+                });
             });
         });
-    });
-</script>
-
-<body>
-
-<!-- Навигационное меню -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <!-- Кнопка-бургер -->
-        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Список вкладок -->
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'events' %}">События</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'about' %}">О сайте</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<!-- Offcanvas меню (боковое меню) -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasMenuLabel">Меню</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
-    </div>
-    <div class="offcanvas-body">
-        <!-- Пример раскрывающихся списков через компонент аккордеона -->
-        <div class="accordion" id="accordionMenu">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Раздел 1
-            </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"> <!-- https://getbootstrap.ru/docs/5.3/components/accordion/#example -->
-            <div class="accordion-body">
-                <ul class="list-unstyled">
-                <li><a href="#">Подраздел 1</a></li>
-                <li><a href="#">Подраздел 2</a></li>
-                </ul>
-            </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Раздел 2
-            </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"> <!-- https://getbootstrap.ru/docs/5.3/components/accordion/#example -->
-            <div class="accordion-body">
-                <ul class="list-unstyled">
-                <li><a href="#">Подраздел A</a></li>
-                <li><a href="#">Подраздел B</a></li>
-                </ul>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-    </div>
-
-
-
-<!-- Контент страницы -->
-<div class="container mt-4">
-    {% block content %}{% endblock %}
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </script>
 </body>
 </html>
