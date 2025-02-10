@@ -72,5 +72,37 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const offcanvas = document.getElementById('offcanvasMenu');
+    const accordionItems = offcanvas.querySelectorAll('.accordion-item');
+
+    // Восстановление состояния аккордеона
+    accordionItems.forEach((item, index) => {
+        const button = item.querySelector('.accordion-button');
+        const collapseElement = item.querySelector('.accordion-collapse');
+        const storedState = localStorage.getItem(`accordion-${index}`);
+        
+        if (storedState === 'open') {
+            button.classList.remove('collapsed');
+            collapseElement.classList.add('show');
+        }
+    });
+
+    // Сохранение состояния при изменении
+    accordionItems.forEach((item, index) => {
+        const button = item.querySelector('.accordion-button');
+        const collapseElement = item.querySelector('.accordion-collapse');
+
+        button.addEventListener('click', function() {
+            if (collapseElement.classList.contains('show')) {
+                localStorage.setItem(`accordion-${index}`, 'open');
+            } else {
+                localStorage.removeItem(`accordion-${index}`);
+            }
+        });
+    });
+});
+    </script>
 </body>
 </html>
