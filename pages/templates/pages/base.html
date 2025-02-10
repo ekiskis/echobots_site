@@ -20,18 +20,63 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link {% if active_page == 'index' %}fw-bold{% endif %}" href="{% url 'index' %}">Главная</a>
+                    <a class="nav-link" href="{% url 'index' %}">Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if active_page == 'events' %}fw-bold{% endif %}" href="{% url 'events' %}">События</a>
+                    <a class="nav-link" href="{% url 'events' %}">События</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if active_page == 'about' %}fw-bold{% endif %}" href="{% url 'about' %}">О сайте</a>
+                    <a class="nav-link" href="{% url 'about' %}">О сайте</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<!-- Offcanvas меню (боковое меню) -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasMenuLabel">Меню</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Пример раскрывающихся списков через компонент аккордеона -->
+        <div class="accordion" id="accordionMenu">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Раздел 1
+            </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionMenu">
+            <div class="accordion-body">
+                <ul class="list-unstyled">
+                <li><a href="#">Подраздел 1</a></li>
+                <li><a href="#">Подраздел 2</a></li>
+                </ul>
+            </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Раздел 2
+            </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionMenu">
+            <div class="accordion-body">
+                <ul class="list-unstyled">
+                <li><a href="#">Подраздел A</a></li>
+                <li><a href="#">Подраздел B</a></li>
+                </ul>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
 
 <!-- Контент страницы -->
 <div class="container mt-4">
