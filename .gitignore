@@ -11,6 +11,7 @@ pages/__pycache__/models.cpython-312.pyc
 echosite/__pycache__/settings.cpython-312.pyc
 # База данных SQLite (если используешь)
 /db.sqlite3
+db.sqlite3
 
 # Кэш и временные файлы Django
 /*__pycache__/
