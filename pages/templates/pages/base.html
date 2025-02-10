@@ -13,9 +13,9 @@
 </head>
 <body>
     <nav>
-        <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Главная</a>
-        <a href="{% url 'events' %}" class="{% if request.path == '/events/' %}active{% endif %}">События</a>
-        <a href="{% url 'about' %}" class="{% if request.path == '/about/' %}active{% endif %}">О сайте</a>
+        <a href="{% url 'home' %}" >Главная</a>
+        <a href="{% url 'events' %}" >События</a>
+        <a href="{% url 'about' %}" >О сайте</a>
     </nav>
 
     <div id="sidebar">

@@ -7,7 +7,7 @@ class Page(models.Model):
     """Модель для хранения контента страниц"""
     title = models.CharField(max_length=200, unique=True, verbose_name="Название страницы")
     slug = models.SlugField(unique=True, blank=True, verbose_name="URL-адрес")
-    content = models.TextField(verbose_name="Содержимое", help_text="Поддерживается HTML и Markdown")
+    content = models.TextField(verbose_name="Содержимое", help_text="Поддерживается HTML и Markdown", default="none")
     format_choices = [
         ('html', 'HTML'),
         ('markdown', 'Markdown')

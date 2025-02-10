@@ -1,10 +1,9 @@
 from django.urls import path
-from . import views
+from .views import home, events, about, page_detail
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    # path('about/', views.about, name='about'),
-    path('events/', views.events, name='events'),
-    path("<slug:slug>/", views.page_detail, name="page_detail"),
-
+    path("", home, name="home"),
+    path("events/", events, name="events"),
+    path("about/", about, name="about"),
+    path("page/<slug:slug>/", page_detail, name="page_detail"),
 ]
