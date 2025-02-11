@@ -11,7 +11,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <!-- Гамбургер: кнопка, открывающая offcanvas меню -->
+            <!-- Боковое меню кнопка -->
             <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -38,7 +38,7 @@
         </div>
     </nav>
 
-    <!-- Offcanvas меню (боковое меню) -->
+    <!-- Боковое меню -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasMenuLabel">Меню</h5>
@@ -53,7 +53,7 @@
                             {{ menu_list.title }}
                         </button>
                     </h2>
-                    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionMenu">
+                    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}">
                         <div class="accordion-body">
                             <ul class="list-unstyled">
                                 {% for item in menu_list.items.all %}

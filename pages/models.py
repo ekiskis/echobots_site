@@ -3,11 +3,18 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 
 
+from django.db import models
+from django.utils.text import slugify
+
 class Page(models.Model):
     """Модель для хранения контента страниц"""
     title = models.CharField(max_length=200, unique=True, verbose_name="Название страницы")
     slug = models.SlugField(unique=True, blank=True, verbose_name="URL-адрес")
-    content = models.TextField(verbose_name="Содержимое", help_text="Поддерживается HTML и Markdown", default="none")
+    content = models.TextField(
+        verbose_name="Содержимое", 
+        help_text="Поддерживается HTML и Markdown", 
+        default=""
+    )
     format_choices = [
         ('html', 'HTML'),
         ('markdown', 'Markdown')
@@ -58,17 +65,23 @@ class MenuItem(models.Model):
     parent_list = models.ForeignKey(MenuList, on_delete=models.CASCADE, null=True, blank=True, related_name="items", verbose_name="Принадлежит списку")
     linked_page = models.ForeignKey(Page, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Связанная страница")
     external_url = models.URLField(blank=True, null=True, verbose_name="Внешняя ссылка")
-    
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок")  # <-- Должно быть это поле
+
     def clean(self):
-        """Гарантирует, что у элемента не может быть одновременно привязки к странице и внешней ссылки"""
+        """Гарантирует, что у элемента не может быть одновременно привязки к странице и внешней ссылке"""
         if self.linked_page and self.external_url:
             raise ValidationError("Элемент не может одновременно ссылаться на страницу и внешний ресурс.")
-    
+
+    def get_url(self):
+        """Возвращает URL страницы или внешней ссылки"""
+        if self.linked_page:
+            return f"/page/{self.linked_page.slug}/"
+        return self.external_url
+
     def __str__(self):
         return self.title
 
 class UploadedImage(models.Model):
-    """Модель для хранения загруженных изображений"""
     image = models.ImageField(upload_to='uploads/', verbose_name="Изображение")
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
@@ -77,4 +90,4 @@ class UploadedImage(models.Model):
 
     def get_html_tag(self):
         """Генерирует HTML-код для вставки изображения"""
-        return f'<img src="{self.image.url}" alt="{self.image.name}">'
+        return f'<img src="{self.image.url}" alt="Текст">'

@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import *
+import os
+from django.conf import settings
+
 
 class PageBlockInline(admin.TabularInline):
     model = PageBlock
@@ -19,14 +22,13 @@ class MenuListAdmin(admin.ModelAdmin):
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ('title', 'parent_list', 'linked_page', 'external_url')
+    list_display = ('title', 'parent_list', 'linked_page', 'external_url', 'order')
     search_fields = ('title',)
     list_filter = ('parent_list',)
+    ordering = ('order',)
+    autocomplete_fields = ('linked_page',) 
 
 @admin.register(UploadedImage)
-class UploadedImageAdmin(admin.ModelAdmin):
-    list_display = ('image', 'uploaded_at')
-
 class UploadedImageAdmin(admin.ModelAdmin):
     list_display = ('image', 'uploaded_at', 'preview', 'html_code')
     
@@ -35,8 +37,23 @@ class UploadedImageAdmin(admin.ModelAdmin):
     
     def html_code(self, obj):
         return format_html('<code>{}</code>', obj.get_html_tag())
-
+    
     html_code.short_description = "HTML-код"
+
+    def delete_queryset(self, request, queryset):
+        # Удаление файлов перед удалением записей
+        for obj in queryset:
+            if obj.image:
+                if os.path.isfile(os.path.join(settings.MEDIA_ROOT, obj.image.name)):
+                    os.remove(os.path.join(settings.MEDIA_ROOT, obj.image.name))
+        queryset.delete()
+
+    def delete_model(self, request, obj):
+        # Удаление файла при удалении одной записи
+        if obj.image:
+            if os.path.isfile(os.path.join(settings.MEDIA_ROOT, obj.image.name)):
+                os.remove(os.path.join(settings.MEDIA_ROOT, obj.image.name))
+        obj.delete()
     
 class MenuItemAdmin(admin.ModelAdmin):
     search_fields = ('title', 'linked_page__title')
