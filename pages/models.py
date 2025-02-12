@@ -65,8 +65,7 @@ class MenuItem(models.Model):
     parent_list = models.ForeignKey(MenuList, on_delete=models.CASCADE, null=True, blank=True, related_name="items", verbose_name="Принадлежит списку")
     linked_page = models.ForeignKey(Page, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Связанная страница")
     external_url = models.URLField(blank=True, null=True, verbose_name="Внешняя ссылка")
-    order = models.PositiveIntegerField(default=0, verbose_name="Порядок")  # <-- Должно быть это поле
-
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок")
     def clean(self):
         """Гарантирует, что у элемента не может быть одновременно привязки к странице и внешней ссылке"""
         if self.linked_page and self.external_url:
