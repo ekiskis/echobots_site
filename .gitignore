@@ -1,10 +1,6 @@
-
-
-
-
-
 /.venv
 *__pycache__/
 uploads/
 db.sqlite3
-echosite/__pycache__/settings.cpython-312.pyc
+echosite/
+echosite/__pycache__/__init__.cpython-312.pyc
