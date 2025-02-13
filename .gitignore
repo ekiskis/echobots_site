@@ -1,11 +1,10 @@
+
+
+
+
+
 /.venv
-
-# База данных SQLite (если используешь)
-*db.sqlite3
-
-# Кэш и временные файлы Django
 *__pycache__/
-db.sqlite3
 uploads/
 db.sqlite3
-*echosite/__pycache__/
+echosite/__pycache__/settings.cpython-312.pyc
