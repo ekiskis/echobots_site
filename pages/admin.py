@@ -30,6 +30,7 @@ class MenuItemAdmin(admin.ModelAdmin):
 
 @admin.register(UploadedImage)
 class UploadedImageAdmin(admin.ModelAdmin):
+    """Загрузка изображений"""
     list_display = ('image', 'uploaded_at', 'preview', 'html_code')
     
     def preview(self, obj):

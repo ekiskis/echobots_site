@@ -1,13 +1,12 @@
 from django.db import models
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
-
-
 from django.db import models
 from django.utils.text import slugify
+import os
 
 class Page(models.Model):
-    """Модель для хранения контента страниц"""
+    """Хранение контента страниц"""
     title = models.CharField(max_length=200, unique=True, verbose_name="Название страницы")
     slug = models.SlugField(unique=True, blank=True, verbose_name="URL-адрес")
     content = models.TextField(
@@ -51,16 +50,15 @@ class PageBlock(models.Model):
         verbose_name = "Блок страницы"
         verbose_name_plural = "Блоки страниц"
 
-
 class MenuList(models.Model):
-    """Модель для списка элементов в боковом меню"""
+    """Список элементов"""
     title = models.CharField(max_length=100, unique=True, verbose_name="Название списка")
     
     def __str__(self):
         return self.title
 
 class MenuItem(models.Model):
-    """Элемент меню (либо отдельный пункт, либо внутри списка)"""
+    """Элементы меню"""
     title = models.CharField(max_length=100, verbose_name="Название элемента")
     parent_list = models.ForeignKey(MenuList, on_delete=models.CASCADE, null=True, blank=True, related_name="items", verbose_name="Принадлежит списку")
     linked_page = models.ForeignKey(Page, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Связанная страница")
@@ -72,7 +70,7 @@ class MenuItem(models.Model):
             raise ValidationError("Элемент не может одновременно ссылаться на страницу и внешний ресурс.")
 
     def get_url(self):
-        """Возвращает URL страницы или внешней ссылки"""
+        """Сслыка в элементе"""
         if self.linked_page:
             return f"/page/{self.linked_page.slug}/"
         return self.external_url
@@ -88,5 +86,5 @@ class UploadedImage(models.Model):
         return self.image.name
 
     def get_html_tag(self):
-        """Генерирует HTML-код для вставки изображения"""
+        """HTML-код для изображения"""
         return f'<img src="{self.image.url}" alt="Текст">'
